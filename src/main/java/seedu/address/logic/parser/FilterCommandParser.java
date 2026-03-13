@@ -3,12 +3,13 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 
 /**
  * Parses input arguments and creates a new FilterCommand object.
@@ -24,10 +25,16 @@ public class FilterCommandParser implements Parser<FilterCommand> {
     public FilterCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
-        List<String> tagKeywords = argMultimap.getAllValues(PREFIX_TAG).stream()
-                .map(String::trim)
-                .filter(keyword -> !keyword.isEmpty())
-                .collect(Collectors.toList());
+        List<String> rawTagValues = argMultimap.getAllValues(PREFIX_TAG);
+        List<String> tagKeywords = new ArrayList<>();
+
+        for (String rawTag : rawTagValues) {
+            String trimmedTag = rawTag.trim();
+            if (trimmedTag.isEmpty() || !Tag.isValidTagName(trimmedTag)) {
+                throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
+            }
+            tagKeywords.add(trimmedTag);
+        }
 
         if (tagKeywords.isEmpty() || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(

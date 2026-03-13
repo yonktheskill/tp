@@ -24,6 +24,7 @@ public class FilterCommand extends Command {
     private final TagContainsKeywordsPredicate predicate;
 
     public FilterCommand(TagContainsKeywordsPredicate predicate) {
+        requireNonNull(predicate);
         this.predicate = predicate;
     }
 

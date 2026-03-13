@@ -1,6 +1,10 @@
 package seedu.address.model.person;
 
+import static java.util.Objects.requireNonNull;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -12,7 +16,8 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
     public TagContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+        requireNonNull(keywords);
+        this.keywords = new ArrayList<>(keywords);
     }
 
     @Override
@@ -35,6 +40,11 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
 
         TagContainsKeywordsPredicate otherPredicate = (TagContainsKeywordsPredicate) other;
         return keywords.equals(otherPredicate.keywords);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(keywords);
     }
 
     @Override
