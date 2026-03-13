@@ -75,6 +75,16 @@ public class FilterCommandTest {
     }
 
     @Test
+    public void execute_mixedCaseKeywords_caseInsensitive() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        TagContainsKeywordsPredicate predicate = preparePredicate("Friends OweSMoney");
+        FilterCommand command = new FilterCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE, BENSON, DANIEL), model.getFilteredPersonList());
+    }
+
+    @Test
     public void toStringMethod() {
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList("friends"));
         FilterCommand filterCommand = new FilterCommand(predicate);
