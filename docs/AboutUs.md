@@ -18,14 +18,14 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 - Role: Developer
 
-### Jane Doe
+### Ashwin Govind
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/ashw1ng.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/ashw1ng)]
 [[portfolio](team/johndoe.md)]
 
-- Role: Team Lead
+- Role: Developer
 - Responsibilities: UI
 
 ### Tan Hong Xu
