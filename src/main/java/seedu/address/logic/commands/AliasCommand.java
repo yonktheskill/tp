@@ -45,26 +45,26 @@ public class AliasCommand extends Command {
                 "add", "archive", "edit", "delete", "star", "unstar", "clear", "list", "listarchived", "exit", "help",
                 "remark", "sort", "filter", "find", "unarchive", "alias");
         switch (action) {
-            case "add":
-                if (aliasRegistry.addAlias(alias, command, reservedWords)) {
-                    return new CommandResult(String.format(MESSAGE_ADD_SUCCESS, alias, command));
-                }
-                throw new CommandException(String.format(MESSAGE_ADD_CONFLICT, alias));
+        case "add":
+            if (aliasRegistry.addAlias(alias, command, reservedWords)) {
+                return new CommandResult(String.format(MESSAGE_ADD_SUCCESS, alias, command));
+            }
+            throw new CommandException(String.format(MESSAGE_ADD_CONFLICT, alias));
 
-            case "remove":
-                if (aliasRegistry.removeAlias(alias)) {
-                    return new CommandResult(String.format(MESSAGE_REMOVE_SUCCESS, alias));
-                }
-                throw new CommandException(String.format(MESSAGE_REMOVE_FAIL, alias));
+        case "remove":
+            if (aliasRegistry.removeAlias(alias)) {
+                return new CommandResult(String.format(MESSAGE_REMOVE_SUCCESS, alias));
+            }
+            throw new CommandException(String.format(MESSAGE_REMOVE_FAIL, alias));
 
-            case "list":
-                String list = aliasRegistry.getAllAliases().entrySet().stream()
-                        .map(e -> e.getKey() + " -> " + e.getValue())
-                        .collect(Collectors.joining("\n"));
-                return new CommandResult(String.format(MESSAGE_LIST, list.isEmpty() ? "(none)" : list));
+        case "list":
+            String list = aliasRegistry.getAllAliases().entrySet().stream()
+                    .map(e -> e.getKey() + " -> " + e.getValue())
+                    .collect(Collectors.joining("\n"));
+            return new CommandResult(String.format(MESSAGE_LIST, list.isEmpty() ? "(none)" : list));
 
-            default:
-                throw new CommandException(MESSAGE_USAGE);
+        default:
+            throw new CommandException(MESSAGE_USAGE);
         }
     }
 }
