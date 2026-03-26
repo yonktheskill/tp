@@ -80,51 +80,64 @@ If you can type quickly, PingBook lets you manage hundreds of contacts faster th
 
 Before diving in, here are the technical terms you will encounter in this guide. They sound more complicated than they are!
 
-**Terminal (also called Command Prompt, Command Line, or CLI)**
+##### Terminal (also called Command Prompt, Command Line, or CLI)
+
 > A text window where you communicate with your computer by typing instructions. Instead of clicking icons, you type commands like `cd Documents` or `java -jar pingbook.jar`. Think of it like sending text messages to your computer.
 >
 > - On **Windows**, it is called **Command Prompt** (or **PowerShell**).
 > - On **macOS**, it is called **Terminal**.
 > - On **Linux**, it is also called **Terminal**.
 
-**Folder / Directory**
+##### Folder / Directory
+
 > A folder on your computer. In terminal commands, folders are referred to as "directories." They are the same thing.
 
-**File path**
+##### File path
+
 > The full address of a file or folder on your computer, similar to a postal address but for files.
 >
 > - On **Windows**, it looks like: `C:\Users\yourname\Documents\PingBook`
 > - On **macOS/Linux**, it looks like: `/Users/yourname/Documents/PingBook`
 > The `~` symbol is a shortcut that means "your home folder." So `~/Documents` means `/Users/yourname/Documents`.
 
-**JAR file (`.jar`)**
+##### JAR file (`.jar`)
+
 > A special file type that packages a runnable Java application. `pingbook.jar` is the file that contains and runs PingBook. You launch it with a terminal command rather than double-clicking it.
 
-**Java**
+##### Java
+
 > A programming language and platform that PingBook is built on. Your computer needs Java installed for PingBook to work, just as you need a PDF reader to open a PDF. We need **Java 17** specifically.
 
-**JDK (Java Development Kit)**
+##### JDK (Java Development Kit)
+
 > The full package that installs Java on your computer. When this guide says "install Java 17," it means install the JDK version 17.
 
-**Command**
+##### Command
+
 > An instruction you type into PingBook's command box. For example, `list` is a command that shows all your contacts.
 
-**Parameter**
+##### Parameter
+
 > Extra information you attach to a command to tell it what to do. For example, in `add n/Alex Tan`, the part `n/Alex Tan` is a parameter that tells the app the person's name is "Alex Tan."
 
-**Prefix**
+##### Prefix
+
 > The short code before each piece of information, like `n/` for name, `p/` for phone, or `e/` for email. Each prefix tells PingBook what type of information follows.
 
-**Index**
+##### Index
+
 > The number shown next to each contact in the list (1, 2, 3…). Commands like `delete` and `edit` use this number to know which contact you mean.
 
-**JSON file (`.json`)**
+##### JSON file (`.json`)
+
 > A plain-text file format used to store data in an organised way. PingBook saves all your contacts in a file called `pingbook.json`. You can open it in any text editor if you ever need to.
 
-**Alphanumeric**
+##### Alphanumeric
+
 > Letters (A–Z, a–z) and digits (0–9) only. No spaces, punctuation, or special characters like `@` or `#`.
 
-**Case-insensitive**
+##### Case-insensitive
+
 > The search does not care whether letters are uppercase or lowercase. For example, searching `alex` will also find `Alex` and `ALEX`.
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -137,7 +150,7 @@ This section walks you through installing and launching PingBook for the first t
 
 Your **terminal** is the text window where you type commands. Here is how to open it:
 
-**On Windows:**
+##### On Windows
 
 1. Click the **Start** button (the Windows logo in the bottom-left corner).
 2. Type `cmd` in the search bar.
@@ -146,7 +159,7 @@ Your **terminal** is the text window where you type commands. Here is how to ope
 
 > Alternatively, press the **Windows key + R** (hold the Windows key and press R), type `cmd` into the box that appears, and press **Enter**.
 
-**On macOS:**
+##### On macOS
 
 1. Press **Cmd + Space** (hold the Command key and press Space) to open Spotlight Search.
 2. Type `Terminal` and press **Enter**.
@@ -171,7 +184,7 @@ PingBook needs **Java 17** (a specific version of the Java platform) to run. Let
    - If the version number starts with something other than `17` (e.g. `11`, `21`), you need to install Java 17.
    - If you see `'java' is not recognized` (Windows) or `command not found` (macOS), Java is not installed yet.
 
-**To install Java 17:**
+##### To install Java 17
 
 - **Windows / Linux:** Download and install the JDK (Java Development Kit, which is the package that installs Java) from [https://www.oracle.com/java/technologies/downloads/](https://www.oracle.com/java/technologies/downloads/). Choose "Java 17" and pick the installer for your operating system. Run the installer and follow the on-screen instructions, then repeat the check above.
 
@@ -196,7 +209,7 @@ Once installed, close and reopen your terminal, then run `java -version` again t
 
 Now you need to tell your terminal to "go to" the folder where `pingbook.jar` lives. You do this with the `cd` command (short for **c**hange **d**irectory, which means change which folder you're in).
 
-**On Windows:**
+##### On Windows
 
 ```
 cd C:\Users\yourname\PingBook
@@ -204,7 +217,7 @@ cd C:\Users\yourname\PingBook
 
 Replace `yourname` with your actual Windows username. Press **Enter**.
 
-**On macOS/Linux:**
+##### On macOS/Linux
 
 ```
 cd ~/Documents/PingBook
@@ -254,7 +267,7 @@ The PingBook window opens with a set of sample contacts already loaded. You shou
 
 ### UI Overview
 
-![Screenshot of APp](images/PingBookUi.png)
+![Screenshot of app](images/PingBookUi.png)
 
 The PingBook window (the user interface, or UI, meaning all the visual elements you interact with) contains four areas:
 
@@ -311,11 +324,11 @@ Here are the rules for reading command formats throughout this guide:
 
 Add a new contact to your address book.
 
-**Format:** `add n/NAME p/PHONE e/EMAIL [a/ADDRESS] [t/TAG]...`
+##### Format: `add n/NAME p/PHONE e/EMAIL [a/ADDRESS] [t/TAG]...`
 
 Each prefix (`n/`, `p/`, `e/`, etc.) tells PingBook what type of information follows it. The table below explains what is required and what rules apply:
 
-**Field constraints:**
+##### Field constraints
 
 | Field | Required? | Rules |
 |---|---|---|
@@ -325,7 +338,7 @@ Each prefix (`n/`, `p/`, `e/`, etc.) tells PingBook what type of information fol
 | `a/ADDRESS` | No | Any text. Can be added later using `edit`. |
 | `t/TAG` | No | Letters and digits only, no spaces. Use separate `t/` prefixes for multiple tags. |
 
-**Steps:**
+##### Steps
 
 1. Click the **Command box**.
 2. Type `add` followed by the contact's details using the prefixes shown above.
@@ -350,13 +363,13 @@ This adds a contact named Priya Sharma with a phone number, email, address, and 
 
 Change one or more details of an existing contact.
 
-**Format:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...`
+##### Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...`
 
 - `INDEX` is the number shown next to the contact in the current list (e.g. if Priya is contact number 3, use `edit 3 ...`).
 - You must change at least one field; you cannot run `edit 3` with nothing after it.
 - Any field you leave out stays unchanged, **except tags**: if you include any `t/` value, it **replaces all** existing tags. To remove all tags entirely, use `t/` with nothing after it.
 
-**Steps:**
+##### Steps
 
 1. Type `list` and press **Enter** to see all contacts and their index numbers.
 2. Type `edit` followed by the index number and the fields you want to update.
@@ -386,11 +399,11 @@ Change one or more details of an existing contact.
 
 Add, update, or remove a free-text note attached to a contact. This is useful for personal reminders like "Prefers email" or "Met at orientation week."
 
-**Format:** `remark INDEX r/REMARK`
+##### Format: `remark INDEX r/REMARK`
 
 - To remove an existing remark, type `r/` with nothing after it.
 
-**Steps:**
+##### Steps
 
 1. Type `list` and press **Enter** to find the contact's index number.
 2. Type `remark INDEX r/` followed by your note.
@@ -416,9 +429,9 @@ Add, update, or remove a free-text note attached to a contact. This is useful fo
 
 Permanently remove a contact from your address book.
 
-**Format:** `delete INDEX`
+##### Format: `delete INDEX`
 
-**Steps:**
+##### Steps
 
 1. Type `list` and press **Enter** to find the contact's index number.
 2. Type `delete` followed by the index number.
@@ -443,12 +456,12 @@ Permanently remove a contact from your address book.
 
 Show all your active (non-archived) contacts.
 
-**Format:** `list`
+##### Format: `list`
 
 - Starred contacts appear before unstarred contacts.
 - Archived contacts are not shown here. Use `listarchived` to see them.
 
-**Steps:**
+##### Steps
 
 1. Type `list`.
 2. Press **Enter**.
@@ -464,14 +477,14 @@ Show all your active (non-archived) contacts.
 
 Show only the contacts whose names contain the words you search for.
 
-**Format:** `find KEYWORD [MORE_KEYWORDS]`
+##### Format: `find KEYWORD [MORE_KEYWORDS]`
 
 - The search is **case-insensitive**, meaning it does not matter whether you use uppercase or lowercase letters. `alex` matches `Alex`.
 - Only **complete words** are matched. Searching `Al` will not find `Alex`; you need to type the full word `Alex`.
 - If you type multiple keywords, contacts matching **any one** of them are shown. For example, `find alex david` shows everyone named Alex and everyone named David.
 - Only the contact's **name** is searched, not their phone number, email, or tags.
 
-**Steps:**
+##### Steps
 
 1. Type `find` followed by one or more name keywords.
 2. Press **Enter**.
@@ -493,13 +506,13 @@ Show only the contacts whose names contain the words you search for.
 
 Show only the contacts that have a specific tag attached to them.
 
-**Format:** `filter t/TAG [t/MORE_TAGS]`
+##### Format: `filter t/TAG [t/MORE_TAGS]`
 
 - Tag matching is **case-insensitive**. `Friend` matches `friend`.
 - If you provide multiple tags, contacts that have **any one** of those tags are shown.
 - Archived contacts are never included in filter results.
 
-**Steps:**
+##### Steps
 
 1. Type `filter t/` followed by the tag name.
 2. Press **Enter**.
@@ -517,9 +530,9 @@ Show only the contacts that have a specific tag attached to them.
 
 Reorder your contact list so that starred contacts appear first, and all remaining contacts are sorted alphabetically by name.
 
-**Format:** `sort`
+##### Format: `sort`
 
-**Steps:**
+##### Steps
 
 1. Type `sort`.
 2. Press **Enter**.
@@ -537,9 +550,9 @@ Reorder your contact list so that starred contacts appear first, and all remaini
 
 Mark a contact as important so they always float to the top of the list.
 
-**Format:** `star INDEX`
+##### Format: `star INDEX`
 
-**Steps:**
+##### Steps
 
 1. Type `list` and press **Enter** to find the contact's index number.
 2. Type `star` followed by the index number.
@@ -562,9 +575,9 @@ Mark a contact as important so they always float to the top of the list.
 
 Remove the starred status from a contact.
 
-**Format:** `unstar INDEX`
+##### Format: `unstar INDEX`
 
-**Steps:**
+##### Steps
 
 1. Type `list` and press **Enter** to find the contact's index number.
 2. Type `unstar` followed by the index number.
@@ -583,12 +596,12 @@ Remove the starred status from a contact.
 
 Hide a contact from the main list without deleting them. Useful for people you rarely contact but still want to keep on record.
 
-**Format:** `archive INDEX`
+##### Format: `archive INDEX`
 
 - Archived contacts are hidden from `list`, `find`, and `filter` results.
 - To see archived contacts, use the `listarchived` command.
 
-**Steps:**
+##### Steps
 
 1. Type `list` and press **Enter** to find the contact's index number.
 2. Type `archive` followed by the index number.
@@ -607,9 +620,9 @@ Hide a contact from the main list without deleting them. Useful for people you r
 
 Move an archived contact back to your active list.
 
-**Format:** `unarchive INDEX`
+##### Format: `unarchive INDEX`
 
-**Steps:**
+##### Steps
 
 1. Type `listarchived` and press **Enter** to see archived contacts and their index numbers.
 2. Type `unarchive` followed by the index number.
@@ -629,9 +642,9 @@ unarchive 1</pre>
 
 Show all contacts that have been archived.
 
-**Format:** `listarchived`
+##### Format: `listarchived`
 
-**Steps:**
+##### Steps
 
 1. Type `listarchived`.
 2. Press **Enter**.
@@ -649,7 +662,7 @@ Show all contacts that have been archived.
 
 Create a personal shortcut word that triggers a built-in command. For example, you could create `a` as a shortcut for `add` so you type less.
 
-**Format:**
+##### Format
 
 | What you want to do | Command |
 |---|---|
@@ -660,7 +673,7 @@ Create a personal shortcut word that triggers a built-in command. For example, y
 - `ALIAS` is the shortcut word you want to create. It must not clash with any existing command word or alias.
 - `COMMAND_WORD` must be one of PingBook's built-in commands (e.g. `add`, `delete`, `find`).
 
-**To create a shortcut:**
+##### To create a shortcut
 
 1. Type `alias add` followed by your chosen shortcut word and the command it should trigger.
 2. Press **Enter**.
@@ -699,9 +712,9 @@ PingBook automatically saves all your contacts to a JSON file (a plain-text data
 
 Open the help window, which shows a link to this User Guide.
 
-**Format:** `help`
+##### Format: `help`
 
-**Steps:**
+##### Steps
 
 1. Type `help`.
 2. Press **Enter**.
@@ -721,13 +734,13 @@ A help window opens showing a link to this User Guide.
 
 Delete every single contact from your address book at once.
 
-**Format:** `clear`
+##### Format: `clear`
 
 <div markdown="block" class="alert alert-warning">
 ⚠️ <strong>Warning:</strong> This deletes all contacts permanently and cannot be undone. Before running this command, make a backup copy of <code>data/pingbook.json</code> in case you need the data later.
 </div>
 
-**Steps:**
+##### Steps
 
 1. Type `clear`.
 2. Press **Enter**.
@@ -743,9 +756,9 @@ The contact list becomes empty.
 
 Close PingBook. Your data is saved automatically before the app closes, so you do not need to do anything extra.
 
-**Format:** `exit`
+##### Format: `exit`
 
-**Steps:**
+##### Steps
 
 1. Type `exit`.
 2. Press **Enter**.
@@ -758,7 +771,7 @@ Close PingBook. Your data is saved automatically before the app closes, so you d
 
 PingBook saves your contacts automatically after every command that changes anything. You never need to press a "Save" button.
 
-**Where your data lives:** `data/pingbook.json`, located inside the same folder as `pingbook.jar`.
+##### Where your data lives: `data/pingbook.json`, located inside the same folder as `pingbook.jar`.
 
 ### Transferring your data to another computer
 
@@ -773,23 +786,23 @@ Want to use PingBook on a different computer and bring your contacts with you? H
 
 ## FAQ
 
-**Q: I ran a command but the contact list did not change. What do I do?**
+##### Q: I ran a command but the contact list did not change. What do I do?
 
 Look at the **result display** panel just below the command box. It always shows what happened, including a specific error message if something went wrong. Common issues are a missing required field, or using an index number that is larger than the number of contacts currently shown.
 
-**Q: I added a contact but they don't appear in the list. Why?**
+##### Q: I added a contact but they don't appear in the list. Why?
 
 Your contact may have been accidentally archived. Type `listarchived` and press **Enter** to check. If they appear there, type `unarchive INDEX` (replacing INDEX with their number) and press **Enter** to bring them back to the active list.
 
-**Q: Can I have two contacts with the same name?**
+##### Q: Can I have two contacts with the same name?
 
 No. PingBook treats contacts with identical names as duplicates and will not add the second one. Use a slightly different name (like adding a middle initial) if you genuinely need two contacts with the same name.
 
-**Q: How do I undo a command?**
+##### Q: How do I undo a command?
 
 PingBook does not have an undo command. For irreversible actions like `delete` and `clear`, make a backup copy of `data/pingbook.json` beforehand so you can restore it if needed.
 
-**Q: I get an error saying "Unknown command." What does that mean?**
+##### Q: I get an error saying "Unknown command." What does that mean?
 
 This means PingBook did not recognise the word you typed as a valid command. Check your spelling and make sure there are no extra spaces before the command word. Refer to the [Command Summary](#command-summary) for the full list of valid commands.
 
@@ -797,9 +810,9 @@ This means PingBook did not recognise the word you typed as a valid command. Che
 
 ## Known Issues
 
-1. **App window opens off-screen after disconnecting a monitor:** If you moved PingBook to a second screen and then unplugged that screen, the app window might open in a position you cannot see the next time you launch it. To fix this: find and delete the file `preferences.json` from the folder containing `pingbook.jar`, then relaunch the app. (This file stores the window position, and deleting it resets the window to the centre of your screen.)
+##### App window opens off-screen after disconnecting a monitor: If you moved PingBook to a second screen and then unplugged that screen, the app window might open in a position you cannot see the next time you launch it. To fix this: find and delete the file `preferences.json` from the folder containing `pingbook.jar`, then relaunch the app. This file stores the window position, and deleting it resets the window to the centre of your screen.
 
-2. **Help window does not reappear after being minimised:** If you minimise the help window and then press **F1** or type `help` again, no new window appears. The help window is still open; it is just hidden at the bottom of your screen. Look for it in your **taskbar** (the bar of open apps along the bottom of your screen on Windows, or the Dock on macOS) and click it to bring it back.
+##### Help window does not reappear after being minimised: If you minimise the help window and then press **F1** or type `help` again, no new window appears. The help window is still open; it is just hidden at the bottom of your screen. Look for it in your **taskbar** (the bar of open apps along the bottom of your screen on Windows, or the Dock on macOS) and click it to bring it back.
 
 [↑ Back to Table of Contents](#table-of-contents)
 

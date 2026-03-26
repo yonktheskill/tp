@@ -208,6 +208,18 @@ body.sidebar-toc-open {
   overflow: hidden;
 }
 
+.post-content h5 {
+  color: black;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@page {
+  margin: 10mm 12mm;
+}
+
 @media (min-width: 1280px) {
   .sidebar-toc-launcher-rail,
   .sidebar-toc-launcher,
@@ -266,10 +278,39 @@ body.sidebar-toc-open {
 }
 
 @media print {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
   .page-with-sidebar {
     display: block;
     width: 100%;
     margin-left: 0;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+
+  .alert,
+  .example-block,
+  .result-block,
+  .example-command,
+  .example-result,
+  blockquote,
+  p,
+  pre,
+  dl,
+  table,
+  figure {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   .sidebar-toc-launcher-rail,
