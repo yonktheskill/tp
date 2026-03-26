@@ -150,6 +150,7 @@ public class StorageManagerTest {
         Path abPath = getTempFilePath("ab");
         Path aliasPath = getTempFilePath("aliases");
         JsonAddressBookStorage abStorage = new JsonAddressBookStorage(abPath);
+        JsonAliasStorage aliasStorage = new JsonAliasStorage(aliasPath);
         JsonUserPrefsStorage prefs = new JsonUserPrefsStorage(getTempFilePath("prefs"));
         AliasStorage failingAlias = new AliasStorage() {
             @Override
@@ -159,11 +160,12 @@ public class StorageManagerTest {
 
             @Override
             public Optional<Map<String, String>> readAliases() throws DataLoadingException {
-                return Optional.empty();
+                return aliasStorage.readAliases();
             }
 
             @Override
             public void saveAliases(Map<String, String> aliases) throws IOException {
+                aliasStorage.saveAliases(aliases);
                 throw new IOException("alias disk full");
             }
         };
@@ -176,6 +178,10 @@ public class StorageManagerTest {
         ReadOnlyAddressBook restoredBook = abStorage.readAddressBook()
                 .orElseThrow(() -> new AssertionError("AddressBook file should still exist"));
         assertEquals(originalBook, new AddressBook(restoredBook));
+
+        Map<String, String> restoredAliases = aliasStorage.readAliases()
+            .orElseThrow(() -> new AssertionError("Aliases file should still exist"));
+        assertEquals(originalAliases, restoredAliases);
 
         // No backup files should linger
         assertFalse(Files.exists(abPath.resolveSibling(abPath.getFileName() + ".bak")));

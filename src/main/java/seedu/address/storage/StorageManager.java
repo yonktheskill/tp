@@ -134,6 +134,7 @@ public class StorageManager implements Storage {
                 try {
                     Files.move(abBackupPath, abPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException restoreEx) {
+                    e.addSuppressed(restoreEx);
                     logger.warning("Could not restore address book backup after partial save: "
                             + restoreEx.getMessage());
                 }
@@ -141,6 +142,7 @@ public class StorageManager implements Storage {
                 try {
                     Files.deleteIfExists(abPath);
                 } catch (IOException cleanupEx) {
+                    e.addSuppressed(cleanupEx);
                     logger.warning("Could not clean up partial address book write: "
                             + cleanupEx.getMessage());
                 }
@@ -149,6 +151,7 @@ public class StorageManager implements Storage {
                 try {
                     Files.move(aliasBackupPath, aliasPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException restoreEx) {
+                    e.addSuppressed(restoreEx);
                     logger.warning("Could not restore aliases backup after partial save: "
                             + restoreEx.getMessage());
                 }
@@ -156,6 +159,7 @@ public class StorageManager implements Storage {
                 try {
                     Files.deleteIfExists(aliasPath);
                 } catch (IOException cleanupEx) {
+                    e.addSuppressed(cleanupEx);
                     logger.warning("Could not clean up partial aliases write: "
                             + cleanupEx.getMessage());
                 }

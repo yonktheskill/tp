@@ -38,7 +38,7 @@ public class JsonAliasStorage implements AliasStorage {
 
     @Override
     public Optional<Map<String, String>> readAliases() throws DataLoadingException {
-        if (!Files.exists(filePath)) {
+        if (Files.notExists(filePath)) {
             return Optional.empty();
         }
         logger.fine("Reading aliases from " + filePath);

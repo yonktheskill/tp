@@ -84,7 +84,9 @@ public class MainAppTest {
     }
 
     @Test
-    public void initAliases_emptyOptional_registryUnchanged() {
+    public void initAliases_emptyOptional_clearsRegistry() {
+        AliasCommand.getAliasRegistry().addAlias("ls", "list", AliasCommand.RESERVED_COMMAND_WORDS);
+
         AliasStorage storage = new AliasStorage() {
             @Override
             public Path getAliasesFilePath() {
@@ -105,7 +107,9 @@ public class MainAppTest {
     }
 
     @Test
-    public void initAliases_dataLoadingException_doesNotThrow() {
+    public void initAliases_dataLoadingException_clearsRegistryAndDoesNotThrow() {
+        AliasCommand.getAliasRegistry().addAlias("ls", "list", AliasCommand.RESERVED_COMMAND_WORDS);
+
         AliasStorage storage = new AliasStorage() {
             @Override
             public Path getAliasesFilePath() {
@@ -122,6 +126,7 @@ public class MainAppTest {
         };
 
         assertDoesNotThrow(() -> mainApp.initAliases(storage));
+        assertTrue(AliasCommand.getAliasRegistry().getAllAliases().isEmpty());
     }
 
     // ================ StubStorage inner class ==============================

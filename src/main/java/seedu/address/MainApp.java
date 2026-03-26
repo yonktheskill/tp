@@ -107,9 +107,15 @@ public class MainApp extends Application {
     void initAliases(AliasStorage storage) {
         logger.info("Attempting to load aliases from storage");
         try {
-            storage.readAliases().ifPresent(aliases ->
-                    AliasCommand.getAliasRegistry().loadAliases(aliases, AliasCommand.RESERVED_COMMAND_WORDS));
+            Optional<java.util.Map<String, String>> aliasesOptional = storage.readAliases();
+            if (aliasesOptional.isPresent()) {
+                AliasCommand.getAliasRegistry().loadAliases(
+                        aliasesOptional.get(), AliasCommand.RESERVED_COMMAND_WORDS);
+            } else {
+                AliasCommand.getAliasRegistry().clear();
+            }
         } catch (DataLoadingException e) {
+            AliasCommand.getAliasRegistry().clear();
             logger.warning("Failed to load aliases from disk: " + e.getMessage());
         }
     }
