@@ -2,6 +2,7 @@ package seedu.address.storage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Optional;
 
 import seedu.address.commons.exceptions.DataLoadingException;
@@ -12,7 +13,7 @@ import seedu.address.model.UserPrefs;
 /**
  * API of the Storage component
  */
-public interface Storage extends AddressBookStorage, UserPrefsStorage {
+public interface Storage extends AddressBookStorage, UserPrefsStorage, AliasStorage {
 
     @Override
     Optional<UserPrefs> readUserPrefs() throws DataLoadingException;
@@ -28,5 +29,13 @@ public interface Storage extends AddressBookStorage, UserPrefsStorage {
 
     @Override
     void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
+
+    /**
+     * Saves both the address book and alias map together.
+     * Implementers should make a best-effort attempt to keep the two files in a
+     * mutually consistent state by rolling back partial writes when an I/O failure
+     * is detected during the save.
+     */
+    void saveAll(ReadOnlyAddressBook addressBook, Map<String, String> aliases) throws IOException;
 
 }

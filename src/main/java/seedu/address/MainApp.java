@@ -15,6 +15,7 @@ import seedu.address.commons.util.ConfigUtil;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 import seedu.address.logic.LogicManager;
+import seedu.address.logic.commands.AliasCommand;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -23,7 +24,9 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.AddressBookStorage;
+import seedu.address.storage.AliasStorage;
 import seedu.address.storage.JsonAddressBookStorage;
+import seedu.address.storage.JsonAliasStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
@@ -58,9 +61,13 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
-        storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        AliasStorage aliasStorage = new JsonAliasStorage(
+                userPrefs.getAddressBookFilePath().resolveSibling("aliases.json"));
+        storage = new StorageManager(addressBookStorage, userPrefsStorage, aliasStorage);
 
         model = initModelManager(storage, userPrefs);
+
+        initAliases(aliasStorage);
 
         logic = new LogicManager(model, storage);
 
@@ -72,7 +79,7 @@ public class MainApp extends Application {
      * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
      * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
-    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
+    Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
         logger.info("Using data file : " + storage.getAddressBookFilePath());
 
         Optional<ReadOnlyAddressBook> addressBookOptional;
@@ -95,6 +102,31 @@ public class MainApp extends Application {
 
     private void initLogging(Config config) {
         LogsCenter.init(config);
+    }
+
+    void initAliases(AliasStorage storage) {
+        logger.info("Attempting to load aliases from storage");
+        try {
+            Optional<java.util.Map<String, String>> aliasesOptional = storage.readAliases();
+            if (aliasesOptional.isPresent()) {
+                seedu.address.logic.parser.AliasRegistry.LoadAliasesResult loadResult =
+                        AliasCommand.getAliasRegistry().loadAliases(
+                        aliasesOptional.get(), AliasCommand.RESERVED_COMMAND_WORDS);
+                if (loadResult.hasRejectedEntries()) {
+                    logger.warning("Rejected " + loadResult.getRejectedCount()
+                            + " persisted aliases while loading: "
+                            + loadResult.getRejectedEntries().stream()
+                                    .map(seedu.address.logic.parser.AliasRegistry.RejectedAliasEntry::toLogString)
+                                    .reduce((left, right) -> left + "; " + right)
+                                    .orElse(""));
+                }
+            } else {
+                AliasCommand.getAliasRegistry().clear();
+            }
+        } catch (DataLoadingException e) {
+            AliasCommand.getAliasRegistry().clear();
+            logger.warning("Failed to load aliases from disk: " + e.getMessage());
+        }
     }
 
     /**
