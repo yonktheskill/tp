@@ -192,19 +192,19 @@
 
 .cell_email_label {
     -fx-font-size: 12px;
-    -fx-text-fill: #4f6df5;
+    -fx-text-fill: #2f4eb8;
     -fx-padding: 0;
 }
 
 .cell_address_label {
     -fx-font-size: 12px;
-    -fx-text-fill: #8b6cc1;
+    -fx-text-fill: #654795;
     -fx-padding: 0;
 }
 
 .cell_remark_label {
     -fx-font-size: 11px;
-    -fx-text-fill: #a0a4b8;
+    -fx-text-fill: #5c6270;
     -fx-font-style: italic;
     -fx-padding: 0;
 }
@@ -234,7 +234,7 @@
 }
 
 .status-bar .label {
-    -fx-text-fill: #a0a4b8;
+    -fx-text-fill: #5c6270;
     -fx-padding: 4px;
     -fx-pref-height: 26px;
     -fx-font-size: 9pt;
@@ -247,7 +247,7 @@
 }
 
 .status-bar-with-border .label {
-    -fx-text-fill: #a0a4b8;
+    -fx-text-fill: #5c6270;
 }
 
 /* ===== RESULT DISPLAY ===== */
@@ -309,7 +309,11 @@
     -fx-opacity: 1;
 }
 
-.menu-bar .menu:hover > .label,
+.menu-bar .menu:hover > .label {
+    -fx-text-fill: #4f6df5;
+}
+
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .menu-bar .menu:showing > .label {
     -fx-text-fill: #4f6df5;
 }

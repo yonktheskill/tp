@@ -29,7 +29,6 @@ public class PersonListPanelTest {
 
     private static final int FX_TIMEOUT_SECONDS = 5;
     private static final int MIN_VISIBLE_ROWS = 4;
-    private static final double LIST_VIEW_WIDTH_ALLOWANCE = PersonListPanel.LIST_VIEW_WIDTH_ALLOWANCE;
     private static final double WIDTH_TOLERANCE = 8;
 
     @BeforeAll
@@ -83,13 +82,14 @@ public class PersonListPanelTest {
                 List<ListCell<?>> initialCells = getPopulatedCells(listView);
                 double initialListWidth = listView.getWidth();
                 double initialGraphicWidth = getFirstGraphicPrefWidth(initialCells);
+                double initialScrollBarWidth = PersonListPanel.getVisibleVerticalScrollBarWidth(listView);
                 int initialCellCount = initialCells.size();
 
                 assertTrue(initialCellCount >= MIN_VISIBLE_ROWS,
                         "Initial layout should populate more than three visible rows without requiring a resize.");
                 assertTrue(initialGraphicWidth > 0,
                         "Card width should be established on first layout.");
-                assertTrue(Math.abs(initialGraphicWidth - (initialListWidth - LIST_VIEW_WIDTH_ALLOWANCE))
+                assertTrue(Math.abs(initialGraphicWidth - (initialListWidth - initialScrollBarWidth))
                     < WIDTH_TOLERANCE,
                         "Card width should track the list viewport on first layout.");
             } finally {
