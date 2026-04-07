@@ -33,6 +33,9 @@ public class PersonListPanelTest {
 
     @BeforeAll
     public static void initToolkit() throws InterruptedException {
+        assumeTrue(!isHeadlessLinux(),
+                "Skipping PersonListPanelTest in headless Linux CI environment.");
+
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Throwable> startupThrowable = new AtomicReference<>();
         try {
@@ -52,6 +55,11 @@ public class PersonListPanelTest {
         assumeTrue(throwable == null, () ->
                 "Skipping PersonListPanelTest because JavaFX is unavailable: "
                         + throwable.getClass().getSimpleName());
+    }
+
+    private static boolean isHeadlessLinux() {
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        return osName.contains("linux") && System.getenv("DISPLAY") == null;
     }
 
     @Test

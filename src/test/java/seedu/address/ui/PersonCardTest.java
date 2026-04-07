@@ -27,6 +27,9 @@ public class PersonCardTest {
 
     @BeforeAll
     public static void initToolkit() throws InterruptedException {
+        assumeTrue(!isHeadlessLinux(),
+                "Skipping PersonCardTest in headless Linux CI environment.");
+
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Throwable> startupThrowable = new AtomicReference<>();
         try {
@@ -44,15 +47,16 @@ public class PersonCardTest {
         } catch (UnsupportedOperationException e) {
             startupThrowable.set(e);
             latch.countDown();
-        } catch (RuntimeException e) {
-            // JavaFX initialization may fail in environments without GUI support.
-            startupThrowable.set(e);
-            latch.countDown();
         }
         assertTrue(latch.await(FX_TIMEOUT_SECONDS, TimeUnit.SECONDS), "Timed out waiting for JavaFX toolkit startup.");
         Throwable throwable = startupThrowable.get();
         assumeTrue(throwable == null, () ->
             "Skipping PersonCardTest because JavaFX is unavailable: " + throwable.getClass().getSimpleName());
+    }
+
+    private static boolean isHeadlessLinux() {
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        return osName.contains("linux") && System.getenv("DISPLAY") == null;
     }
 
     @Test
@@ -72,7 +76,7 @@ public class PersonCardTest {
             assertFalse(starredIndicator.getText().isEmpty());
 
             assertNotNull(addressLabel);
-            assertEquals("\u2302  " + person.getAddress().toString(), addressLabel.getText());
+            assertEquals("\u2302  " + person.getAddress().value, addressLabel.getText());
         });
     }
 

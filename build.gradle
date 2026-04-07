@@ -28,6 +28,8 @@ tasks.register('checkstyle') {
 
 test {
     useJUnitPlatform()
+    // Prevent CI from hanging indefinitely if a test worker cannot terminate.
+    timeout = java.time.Duration.ofMinutes(10)
     finalizedBy jacocoTestReport
 }
 
