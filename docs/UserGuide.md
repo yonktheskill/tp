@@ -90,7 +90,7 @@ Before diving in, here are the technical terms you will encounter in this guide.
 
 ##### Folder / Directory
 
-> A folder on your computer. In terminal commands, folders are referred to as "directories." They are the same thing.
+> A folder on your computer. In terminal commands, folders are referred to as "directories." They are the same thing!
 
 ##### File path
 
