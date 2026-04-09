@@ -340,8 +340,8 @@ public class JsonPingBookStorageTest {
         java.nio.file.Files.writeString(filePath, "not valid json {{{{{");
         java.nio.file.Files.writeString(backupPath, "also not valid json {{{{{");
 
-        DataLoadingException exception = assertThrows(DataLoadingException.class,
-                () -> storageAt(filePath).readAddressBook());
+        DataLoadingException exception = assertThrows(DataLoadingException.class, () -> storageAt(filePath)
+            .readAddressBook());
 
         assertEquals(1, exception.getSuppressed().length);
     }
@@ -367,8 +367,8 @@ public class JsonPingBookStorageTest {
         java.nio.file.Files.writeString(filePath, "not valid json {{{{{");
         java.nio.file.Files.writeString(backupPath, "also not valid json {{{{{");
 
-        DataLoadingException exception = assertThrows(DataLoadingException.class,
-                () -> storageAt(filePath).readAliases());
+        DataLoadingException exception = assertThrows(DataLoadingException.class, () -> storageAt(filePath)
+            .readAliases());
 
         assertEquals(1, exception.getSuppressed().length);
     }
