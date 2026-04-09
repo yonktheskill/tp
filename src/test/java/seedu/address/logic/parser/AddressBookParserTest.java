@@ -145,7 +145,6 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
-        assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
     }
 
     /**
@@ -176,7 +175,6 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_help() throws Exception {
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD) instanceof HelpCommand);
-        assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD + " 3") instanceof HelpCommand);
     }
 
     /**
@@ -185,8 +183,17 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
         assertTrue(((ListCommand) parser.parseCommand(ListCommand.ARCHIVED_COMMAND_WORD)).isShowArchived());
+    }
+
+    @Test
+    public void parseCommand_noArgumentCommandWithExtraArguments_throwsParseException() {
+        assertInvalidNoArgumentCommand(ExitCommand.COMMAND_WORD + " now", ExitCommand.MESSAGE_USAGE);
+        assertInvalidNoArgumentCommand(HelpCommand.COMMAND_WORD + " me", HelpCommand.MESSAGE_USAGE);
+        assertInvalidNoArgumentCommand(SortCommand.COMMAND_WORD + " byname", SortCommand.MESSAGE_USAGE);
+        assertInvalidNoArgumentCommand(ListCommand.COMMAND_WORD + " archived", ListCommand.MESSAGE_USAGE);
+        assertInvalidNoArgumentCommand(ListCommand.ARCHIVED_COMMAND_WORD + " now",
+            ListCommand.MESSAGE_ARCHIVED_USAGE);
     }
 
     @Test
@@ -226,7 +233,6 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_sort() throws Exception {
         assertTrue(parser.parseCommand(SortCommand.COMMAND_WORD) instanceof SortCommand);
-        assertTrue(parser.parseCommand(SortCommand.COMMAND_WORD + " 3") instanceof SortCommand);
     }
 
     /**
@@ -274,5 +280,10 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
+    }
+
+    private void assertInvalidNoArgumentCommand(String userInput, String usageMessage) {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage);
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand(userInput));
     }
 }

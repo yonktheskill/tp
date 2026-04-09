@@ -92,6 +92,19 @@ public class JsonPingBookStorageTest {
                 storageAt(testDataPath("invalidPersonPingBook.json")).readAddressBook());
     }
 
+    @Test
+    public void readAddressBook_malformedPrimaryWithValidBackup_recoversFromBackup() throws Exception {
+        Path filePath = tempPath("pingbook.json");
+        Path backupPath = tempPath("pingbook.json.bak");
+        AddressBook backupAddressBook = getTypicalAddressBook();
+
+        java.nio.file.Files.writeString(filePath, "not valid json {{{{{");
+        storageAt(backupPath).saveAddressBook(backupAddressBook);
+
+        ReadOnlyAddressBook recoveredAddressBook = storageAt(filePath).readAddressBook().get();
+        assertEquals(backupAddressBook, new AddressBook(recoveredAddressBook));
+    }
+
     // ===================== saveAddressBook =====================
 
     @Test
@@ -169,6 +182,22 @@ public class JsonPingBookStorageTest {
         Optional<Map<String, String>> loaded = storage.readAliases();
         assertTrue(loaded.isPresent());
         assertEquals(new HashMap<>(), loaded.get());
+    }
+
+    @Test
+    public void readAliases_malformedPrimaryWithValidBackup_recoversFromBackup() throws Exception {
+        Path filePath = tempPath("pingbook.json");
+        Path backupPath = tempPath("pingbook.json.bak");
+        Map<String, String> aliases = new HashMap<>();
+        aliases.put("ls", "list");
+        aliases.put("la", "listarchived");
+
+        java.nio.file.Files.writeString(filePath, "not valid json {{{{{");
+        storageAt(backupPath).saveAliases(aliases);
+
+        Optional<Map<String, String>> recoveredAliases = storageAt(filePath).readAliases();
+        assertTrue(recoveredAliases.isPresent());
+        assertEquals(aliases, recoveredAliases.get());
     }
 
     // ===================== saveAliases =====================

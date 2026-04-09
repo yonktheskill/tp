@@ -34,6 +34,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class AddressBookParser {
 
+    private static final String EMPTY_ARGUMENTS = "";
+
     /**
      * Used for initial separation of command word and args.
      */
@@ -110,21 +112,26 @@ public class AddressBookParser {
             return new FilterCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
+            requireNoArguments(arguments, ListCommand.MESSAGE_USAGE);
             return new ListCommand();
 
         case ListCommand.ARCHIVED_COMMAND_WORD:
+            requireNoArguments(arguments, ListCommand.MESSAGE_ARCHIVED_USAGE);
             return new ListCommand(true);
 
         case ExitCommand.COMMAND_WORD:
+            requireNoArguments(arguments, ExitCommand.MESSAGE_USAGE);
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
+            requireNoArguments(arguments, HelpCommand.MESSAGE_USAGE);
             return new HelpCommand();
 
         case RemarkCommand.COMMAND_WORD:
             return new RemarkCommandParser().parse(arguments);
 
         case SortCommand.COMMAND_WORD:
+            requireNoArguments(arguments, SortCommand.MESSAGE_USAGE);
             return new SortCommand();
 
         case StarCommand.COMMAND_WORD:
@@ -139,6 +146,12 @@ public class AddressBookParser {
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
+        }
+    }
+
+    private void requireNoArguments(String arguments, String usageMessage) throws ParseException {
+        if (!arguments.trim().equals(EMPTY_ARGUMENTS)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
         }
     }
 

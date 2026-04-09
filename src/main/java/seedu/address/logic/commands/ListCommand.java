@@ -14,6 +14,10 @@ public class ListCommand extends Command {
 
     public static final String COMMAND_WORD = "list";
     public static final String ARCHIVED_COMMAND_WORD = "listarchived";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all active contacts.\n"
+        + "Example: " + COMMAND_WORD;
+    public static final String MESSAGE_ARCHIVED_USAGE = ARCHIVED_COMMAND_WORD + ": Lists all archived contacts.\n"
+        + "Example: " + ARCHIVED_COMMAND_WORD;
 
     public static final String MESSAGE_SUCCESS = "Listed active contacts";
     public static final String MESSAGE_ARCHIVED_SUCCESS = "Listed archived contacts";

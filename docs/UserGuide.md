@@ -392,7 +392,7 @@ Here are the rules for reading command formats throughout this guide:
 - Parameters inside `[square brackets]` are **optional**; you can include them or leave them out. For example, `[a/ADDRESS]` means you may omit the address.
 - Parameters followed by `...` can be **repeated** as many times as you like. For example, `[t/TAG]...` means you can add zero or more tags: `t/groupmate t/cs2103`.
 - Parameters can be typed in **any order**. `n/Alex p/91234567` and `p/91234567 n/Alex` produce the same result.
-- Commands that take no parameters at all (such as `list`, `help`, `exit`, `clear`, `sort`, and `listarchived`) will simply ignore any extra text you type after the command word.
+- Commands that take no parameters at all (such as `list`, `help`, `exit`, `sort`, and `listarchived`) require only the command word. If you add extra text, PingBook shows an error instead of guessing what you meant. The only exception is `clear`, which optionally accepts the confirmation word `confirm`.
 
 ### Index-based command safety
 
