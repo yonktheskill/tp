@@ -30,14 +30,11 @@ public class UnstarCommandTest {
     @Test
     public void execute_validIndexUnfilteredList_success() {
         Person personToUnstar = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person starredPerson = new Person(personToUnstar.getName(), personToUnstar.getPhone(),
-            personToUnstar.getEmail(), personToUnstar.getAddress(), personToUnstar.getRemark(),
-            personToUnstar.getTags(), true);
+        Person starredPerson = personToUnstar.withStarred(true);
         model.setPerson(personToUnstar, starredPerson);
 
         UnstarCommand unstarCommand = new UnstarCommand(INDEX_FIRST_PERSON);
-        Person unstarredPerson = new Person(starredPerson.getName(), starredPerson.getPhone(), starredPerson.getEmail(),
-                starredPerson.getAddress(), starredPerson.getRemark(), starredPerson.getTags(), false);
+        Person unstarredPerson = starredPerson.withStarred(false);
         String expectedMessage = String.format(UnstarCommand.MESSAGE_UNSTAR_PERSON_SUCCESS,
                 Messages.format(unstarredPerson));
 
@@ -50,15 +47,12 @@ public class UnstarCommandTest {
     @Test
     public void execute_validIndexFilteredList_success() {
         Person personToUnstar = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person starredPerson = new Person(personToUnstar.getName(), personToUnstar.getPhone(),
-            personToUnstar.getEmail(), personToUnstar.getAddress(), personToUnstar.getRemark(),
-            personToUnstar.getTags(), true);
+        Person starredPerson = personToUnstar.withStarred(true);
         model.setPerson(personToUnstar, starredPerson);
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         UnstarCommand unstarCommand = new UnstarCommand(INDEX_FIRST_PERSON);
-        Person unstarredPerson = new Person(starredPerson.getName(), starredPerson.getPhone(), starredPerson.getEmail(),
-                starredPerson.getAddress(), starredPerson.getRemark(), starredPerson.getTags(), false);
+        Person unstarredPerson = starredPerson.withStarred(false);
         String expectedMessage = String.format(UnstarCommand.MESSAGE_UNSTAR_PERSON_SUCCESS,
                 Messages.format(unstarredPerson));
 
@@ -99,6 +93,26 @@ public class UnstarCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
         assertCommandSuccess(unstarCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_unstarArchivedPerson_preservesArchivedFlag() {
+        Person personToUnstar = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person archivedStarredPerson = personToUnstar.withArchived(true).withStarred(true);
+        model.setPerson(personToUnstar, archivedStarredPerson);
+        model.updateFilteredPersonList(Person::isArchived);
+
+        UnstarCommand unstarCommand = new UnstarCommand(INDEX_FIRST_PERSON);
+        Person expectedPerson = archivedStarredPerson.withStarred(false);
+        String expectedMessage = String.format(UnstarCommand.MESSAGE_UNSTAR_PERSON_SUCCESS,
+                Messages.format(expectedPerson));
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.setPerson(archivedStarredPerson, expectedPerson);
+        expectedModel.updateFilteredPersonList(Person::isArchived);
+
+        assertCommandSuccess(unstarCommand, model, expectedMessage, expectedModel);
+        assertTrue(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).isArchived());
     }
 
     @Test
