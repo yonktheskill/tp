@@ -23,10 +23,8 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
-import seedu.address.storage.AddressBookStorage;
 import seedu.address.storage.AliasStorage;
-import seedu.address.storage.JsonAddressBookStorage;
-import seedu.address.storage.JsonAliasStorage;
+import seedu.address.storage.JsonPingBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
@@ -60,14 +58,12 @@ public class MainApp extends Application {
 
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
-        AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
-        AliasStorage aliasStorage = new JsonAliasStorage(
-                userPrefs.getAddressBookFilePath().resolveSibling("aliases.json"));
-        storage = new StorageManager(addressBookStorage, userPrefsStorage, aliasStorage);
+        JsonPingBookStorage pingBookStorage = new JsonPingBookStorage(userPrefs.getAddressBookFilePath());
+        storage = new StorageManager(pingBookStorage, userPrefsStorage, pingBookStorage);
 
         model = initModelManager(storage, userPrefs);
 
-        initAliases(aliasStorage);
+        initAliases(pingBookStorage);
 
         logic = new LogicManager(model, storage);
 

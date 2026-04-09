@@ -1,0 +1,10 @@
+{
+  "_comment": "PingBook file with no aliases key — aliases should default to empty map",
+  "persons" : [ {
+    "name" : "Alice Pauline",
+    "phone" : "94351253",
+    "email" : "alice@example.com",
+    "address" : "123, Jurong West Ave 6, #08-111",
+    "tags" : [ "friends" ]
+  } ]
+}
