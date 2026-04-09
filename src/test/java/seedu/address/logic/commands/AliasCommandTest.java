@@ -66,9 +66,52 @@ public class AliasCommandTest {
     }
 
     @Test
+    public void execute_listAlias_empty() throws Exception {
+        AliasCommand listCmd = new AliasCommand("list", null, null);
+        CommandResult result = listCmd.execute(model);
+        assertTrue(result.getFeedbackToUser().contains("(none)"));
+    }
+
+    @Test
+    public void execute_addAlias_duplicateAlias_throwsCommandException() throws Exception {
+        AliasCommand cmd = new AliasCommand("add", "lc", "list");
+        cmd.execute(model);
+        AliasCommand duplicate = new AliasCommand("add", "lc", "find");
+        CommandException exception = assertThrows(CommandException.class, () -> duplicate.execute(model));
+        assertEquals(String.format(AliasCommand.MESSAGE_ADD_CONFLICT, "lc"), exception.getMessage());
+    }
+
+    @Test
+    public void execute_invalidAction_throwsCommandException() {
+        AliasCommand cmd = new AliasCommand("unknown", null, null);
+        assertThrows(CommandException.class, () -> cmd.execute(model));
+    }
+
+    @Test
+    public void execute_removeAlias_fail_correctMessage() {
+        AliasCommand removeCmd = new AliasCommand("remove", "notfound", null);
+        CommandException exception = assertThrows(CommandException.class, () -> removeCmd.execute(model));
+        assertEquals(String.format(AliasCommand.MESSAGE_REMOVE_FAIL, "notfound"), exception.getMessage());
+    }
+
+    @Test
     public void equals_sameObject_returnsTrue() {
         AliasCommand cmd = new AliasCommand("add", "lc", "list");
         assertTrue(cmd.equals(cmd));
+    }
+
+    @Test
+    public void equals_equalObjects_returnsTrue() {
+        AliasCommand cmd1 = new AliasCommand("add", "lc", "list");
+        AliasCommand cmd2 = new AliasCommand("add", "lc", "list");
+        assertTrue(cmd1.equals(cmd2));
+    }
+
+    @Test
+    public void equals_differentFields_returnsFalse() {
+        AliasCommand cmd1 = new AliasCommand("add", "lc", "list");
+        AliasCommand cmd2 = new AliasCommand("add", "lc", "find");
+        assertFalse(cmd1.equals(cmd2));
     }
 
     @Test
