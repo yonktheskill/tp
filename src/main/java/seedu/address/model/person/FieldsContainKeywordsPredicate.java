@@ -9,11 +9,11 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests that a {@code Person}'s fields contain any of the keywords given.
  * Uses case-insensitive substring matching across name, phone, email, address, remark, and tags.
  */
-public class NameContainsKeywordsPredicate implements Predicate<Person> {
+public class FieldsContainKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
-    public NameContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+    public FieldsContainKeywordsPredicate(List<String> keywords) {
+        this.keywords = List.copyOf(keywords);
     }
 
     @Override
@@ -55,12 +55,17 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof NameContainsKeywordsPredicate)) {
+        if (!(other instanceof FieldsContainKeywordsPredicate)) {
             return false;
         }
 
-        NameContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (NameContainsKeywordsPredicate) other;
-        return keywords.equals(otherNameContainsKeywordsPredicate.keywords);
+        FieldsContainKeywordsPredicate otherPredicate = (FieldsContainKeywordsPredicate) other;
+        return keywords.equals(otherPredicate.keywords);
+    }
+
+    @Override
+    public int hashCode() {
+        return keywords.hashCode();
     }
 
     @Override

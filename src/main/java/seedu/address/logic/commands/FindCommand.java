@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.FieldsContainKeywordsPredicate;
 
 /**
  * Finds and lists all persons in address book whose fields contain any of the
@@ -21,14 +21,14 @@ public class FindCommand extends Command {
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
             + "Example: " + COMMAND_WORD + " alice bob charlie";
 
-    private final NameContainsKeywordsPredicate predicate;
+    private final FieldsContainKeywordsPredicate predicate;
 
     /**
      * Creates a find command with the provided matching predicate.
      *
      * @param predicate predicate used to filter matching persons
      */
-    public FindCommand(NameContainsKeywordsPredicate predicate) {
+    public FindCommand(FieldsContainKeywordsPredicate predicate) {
         this.predicate = predicate;
     }
 

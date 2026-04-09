@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ACTIVE_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ARCHIVED_PERSONS;
 
 import java.util.Objects;
 
@@ -56,8 +57,8 @@ public class ListCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         if (showArchived) {
-            model.setViewPredicate(person -> person.isArchived());
-            model.updateFilteredPersonList(person -> person.isArchived());
+            model.setViewPredicate(PREDICATE_SHOW_ARCHIVED_PERSONS);
+            model.updateFilteredPersonList(PREDICATE_SHOW_ARCHIVED_PERSONS);
             return new CommandResult(MESSAGE_ARCHIVED_SUCCESS);
         }
 

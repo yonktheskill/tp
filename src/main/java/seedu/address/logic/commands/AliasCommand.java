@@ -70,6 +70,10 @@ public class AliasCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        if (action == null) {
+            throw new CommandException(MESSAGE_USAGE);
+        }
+
         switch (action) {
         case "add":
             if (!RESERVED_COMMAND_WORDS.contains(command)) {

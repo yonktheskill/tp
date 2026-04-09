@@ -169,6 +169,8 @@ public class JsonPingBookStorage implements AddressBookStorage, AliasStorage {
                 logger.warning("Recovered PingBook contacts from backup file " + backupPath);
                 return recoveredAddressBook;
             }
+            logger.warning("Backup PingBook file " + backupPath
+                    + " was readable but contained no contacts recoverable for " + primaryPath);
         } catch (DataLoadingException backupException) {
             primaryException.addSuppressed(backupException);
             logger.warning("Backup PingBook file could not be loaded from " + backupPath);
@@ -192,6 +194,8 @@ public class JsonPingBookStorage implements AddressBookStorage, AliasStorage {
                 logger.warning("Recovered PingBook aliases from backup file " + backupPath);
                 return recoveredAliases;
             }
+            logger.warning("Backup alias data at " + backupPath
+                    + " was readable but contained no recoverable aliases for " + primaryPath);
         } catch (DataLoadingException backupException) {
             primaryException.addSuppressed(backupException);
             logger.warning("Backup alias data could not be loaded from " + backupPath);

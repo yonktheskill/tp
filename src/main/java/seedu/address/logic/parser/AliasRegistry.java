@@ -83,7 +83,8 @@ public class AliasRegistry {
             return false;
         }
         Set<String> reserved = (reservedWords != null) ? reservedWords : Set.of();
-        if (reserved.contains(normalizedAlias) || aliasMap.containsKey(normalizedAlias)) {
+        if (reserved.contains(normalizedAlias) || aliasMap.containsKey(normalizedAlias)
+                || (!reserved.isEmpty() && !reserved.contains(normalizedCommandWord))) {
             return false;
         }
         aliasMap.put(normalizedAlias, normalizedCommandWord);

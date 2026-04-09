@@ -49,6 +49,11 @@ public class AliasRegistryTest {
     }
 
     @Test
+    public void addAlias_invalidCommandWord_returnsFalse() {
+        assertFalse(registry.addAlias("ls", "missing", Set.of("list", "find")));
+    }
+
+    @Test
     public void addAlias_mixedCaseAliasAndCommand_normalizesStoredEntry() {
         assertTrue(registry.addAlias("Ls", "LiSt", Set.of("list")));
 

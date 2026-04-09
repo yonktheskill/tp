@@ -42,12 +42,14 @@ public class ClearCommandTest {
     }
 
     @Test
-    public void execute_confirmedWhileViewingArchived_resetsToActiveView() {
+    public void execute_confirmedWhileViewingArchived_resetsToActiveView() throws Exception {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         model.setViewPredicate(Person::isArchived);
         model.updateFilteredPersonList(Person::isArchived);
 
-        new ClearCommand(true).execute(model);
+        CommandResult result = new ClearCommand(true).execute(model);
+
+        assertEquals(ClearCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
 
         assertTrue(model.getFilteredPersonList().isEmpty());
 

@@ -6,7 +6,6 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.List;
@@ -19,7 +18,7 @@ import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.FieldsContainKeywordsPredicate;
 import seedu.address.model.person.Person;
 
 public class ArchiveCommandTest {
@@ -68,7 +67,7 @@ public class ArchiveCommandTest {
 
     @Test
     public void execute_validIndexFilteredList_preservesFilterContext() {
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(List.of("Alice"));
+        FieldsContainKeywordsPredicate predicate = new FieldsContainKeywordsPredicate(List.of("Alice"));
         model.updateFilteredPersonList(predicate.and(model.getViewPredicate()));
 
         Person personToArchive = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -80,7 +79,7 @@ public class ArchiveCommandTest {
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.updateFilteredPersonList(predicate.and(expectedModel.getViewPredicate()));
-        expectedModel.setPerson(ALICE, archivedPerson);
+        expectedModel.setPerson(personToArchive, archivedPerson);
 
         assertCommandSuccess(archiveCommand, model, expectedMessage, expectedModel);
         assertTrue(model.getFilteredPersonList().isEmpty());

@@ -11,13 +11,16 @@ public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Names should only contain letters, digits, spaces, hyphens, apostrophes, and periods,"
-                    + " and it should not be blank";
+                    + " must start with a letter or digit, and punctuation cannot appear consecutively or at the"
+                    + " end of the name";
 
     /*
      * The first character of the name must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[\\p{L}\\p{N}][\\p{L}\\p{N} \\-'.]*";
+    public static final String VALIDATION_REGEX = "[\\p{L}\\p{N}]+(?:[\\-'][\\p{L}\\p{N}]+|\\.[\\p{L}\\p{N}]+"
+            + "|\\.(?=\\s))*(?: [\\p{L}\\p{N}]+(?:[\\-'][\\p{L}\\p{N}]+|\\.[\\p{L}\\p{N}]+"
+            + "|\\.(?=\\s))*)* *";
 
     public final String fullName;
 

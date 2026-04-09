@@ -52,4 +52,9 @@ public class ClearCommand extends Command {
         ClearCommand otherCommand = (ClearCommand) other;
         return confirmed == otherCommand.confirmed;
     }
+
+    @Override
+    public int hashCode() {
+        return Boolean.hashCode(confirmed);
+    }
 }

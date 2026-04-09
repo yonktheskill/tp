@@ -392,7 +392,8 @@ Here are the rules for reading command formats throughout this guide:
 - Parameters inside `[square brackets]` are **optional**; you can include them or leave them out. For example, `[a/ADDRESS]` means you may omit the address.
 - Parameters followed by `...` can be **repeated** as many times as you like. For example, `[t/TAG]...` means you can add zero or more tags: `t/groupmate t/cs2103`.
 - Parameters can be typed in **any order**. `n/Alex p/91234567` and `p/91234567 n/Alex` produce the same result.
-- Commands that take no parameters at all (such as `list`, `help`, `exit`, `sort`, and `listarchived`) require only the command word. If you add extra text, PingBook shows an error instead of guessing what you meant. The only exception is `clear`, which optionally accepts the confirmation word `confirm`.
+- Commands that take no parameters at all (such as `list`, `help`, `exit`, `sort`, and `listarchived`) require only the command word. If you add extra text, PingBook shows an error instead of guessing what you meant.
+- The only exception is `clear`, which optionally accepts the confirmation word `confirm`.
 
 ### Index-based command safety
 
@@ -426,11 +427,11 @@ Each prefix (`n/`, `p/`, `e/`, etc.) tells PingBook what type of information fol
 
 | Field | Required? | Rules |
 |---|---|---|
-| `n/NAME` | Yes | Letters (including accented characters), digits, spaces, hyphens, apostrophes, and periods allowed (e.g. `Anne-Marie`, `O'Brien`, `Dr. Lee`). Must not be blank. |
+| `n/NAME` | Yes | Letters (including accented characters), digits, spaces, hyphens, apostrophes, and periods allowed (e.g. `Anne-Marie`, `O'Brien`, `Dr. Lee`). Must start with a letter or digit, and punctuation cannot appear consecutively or at the end of the name. |
 | `p/PHONE` | Yes | Digits only, 3 to 15 digits long. |
 | `e/EMAIL` | Yes | Must follow the format `localpart@domain` (e.g. `alex@email.com`). |
 | `a/ADDRESS` | No | Any text. Can be added later using `edit`. |
-| `t/TAG` | No | Letters, digits, and hyphens allowed, no spaces. Use separate `t/` prefixes for multiple tags. |
+| `t/TAG` | No | Letters and digits are required in each segment; single hyphens may appear between segments, with no spaces or leading, trailing, or consecutive hyphens. Use separate `t/` prefixes for multiple tags. |
 
 ##### Steps
 
@@ -578,7 +579,7 @@ Shows all your active (non-archived) contacts.
 
 Shows only the contacts that match any of the keywords you search for.
 
-##### Format: `find KEYWORD [MORE_KEYWORDS]`
+#### Format: `find KEYWORD [MORE_KEYWORDS]`
 
 - The search is **case-insensitive**, meaning it does not matter whether you use uppercase or lowercase letters. `alex` matches `Alex`.
 - **Partial matching** is supported. Searching `Al` will find `Alex`, `Alice`, etc.
@@ -600,7 +601,7 @@ The matching contacts appear in the list below.
 </div>
 
 <div markdown="block" class="alert alert-info">
-💡 <strong>Tip:</strong> You can search by any field — name, phone, email, address, or tag. To filter exclusively by tag, use <a href="#filtering-by-tag-filter"><code>filter</code></a>.
+💡 <strong>Tip:</strong> You can search by any field — name, phone, email, address, remark, or tags. To filter exclusively by tag, use <a href="#filtering-by-tag-filter"><code>filter</code></a>.
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -887,7 +888,7 @@ A help window opens showing a link to this User Guide.
 
 Deletes every contact from your address book at once. Requires confirmation to prevent accidental data loss.
 
-##### Format: `clear confirm`
+#### Format: `clear confirm`
 
 ##### Steps
 
