@@ -34,40 +34,28 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 <img src="images/ArchitectureDiagram.png" alt="Architecture diagram showing Main, UI, Logic, Model, and Storage components" width="280" />
 
-The **_Architecture Diagram_** given above explains the high-level design of the App.
+The diagram above shows PingBook at the component level. It deliberately omits lower-level classes and methods so that the main design decisions are easier to see.
 
-Given below is a quick overview of main components and how they interact with each other.
+PingBook is organised around five coarse-grained components:
 
-**Main components of the architecture**
+- **`Main`** starts the application, wires the components together, and handles shutdown.
+- [**`UI`**](#ui-component) accepts user input and renders results.
+- [**`Logic`**](#logic-component) parses commands and coordinates command execution.
+- [**`Model`**](#model-component) stores in-memory contact data and filtered views.
+- [**`Storage`**](#storage-component) persists application data to disk.
 
-**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-T17-2/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S2-CS2103T-T17-2/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+[**`Commons`**](#common-classes) contains utility classes shared by multiple components.
 
-- At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-- At shut down, it shuts down the other components and invokes cleanup methods where necessary.
-
-The bulk of the app's work is done by the following four components:
-
-- [**`UI`**](#ui-component): The UI of the App.
-- [**`Logic`**](#logic-component): The command executor.
-- [**`Model`**](#model-component): Holds the data of the App in memory.
-- [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
-
-[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
-
-**How the architecture components interact with each other**
-
-The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The sequence diagram below shows the same architecture for a typical write operation such as `delete 1`.
 
 <img src="images/ArchitectureSequenceDiagram.png" alt="Sequence diagram for delete command interactions across architecture components" width="574" />
 
-Each of the four main components (also shown in the diagram above),
+At this level, the important flow is:
 
-- defines its _API_ in an `interface` with the same name as the Component.
-- implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
-
-For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
-
-<img src="images/ComponentManagers.png" alt="Class diagram of manager classes implementing component interfaces" width="300" />
+1. The user enters a command through the `UI` component.
+2. `UI` passes the command to `Logic`.
+3. `Logic` updates `Model` and asks `Storage` to persist the updated state.
+4. `Logic` returns the outcome to `UI`, which displays it to the user.
 
 The sections below give more details of each component.
 
@@ -133,12 +121,6 @@ The `Model` component,
 - stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 - does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
-
-<img src="images/BetterModelClassDiagram.png" alt="Alternative model class diagram with shared tags" width="450" />
-
-</div>
-
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-T17-2/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
@@ -149,7 +131,6 @@ The `Storage` component,
 
 - can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
 - inherits from `AddressBookStorage`, `UserPrefsStorage`, and `AliasStorage`, so it can be treated as any one of those interfaces where only that capability is needed.
-- provides `saveAll(ReadOnlyAddressBook, Map<String, String>)` to write both address book and alias data in a coordinated fashion, rolling back partial writes when an I/O failure is detected mid-save.
 - depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
 ### Common classes
@@ -345,26 +326,26 @@ Alias expansion during command dispatch is a planned extension. The `AddressBook
 
 Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice to have) - `*`
 
-| Priority | As a …​                        | I want to …​                                                          | So that I can…​                                                              |
-| -------- | ------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `* * *`  | new user                       | see usage instructions                                                | refer to instructions when I forget how to use the app                       |
-| `* * *`  | user                           | add a new contact with a name, phone number, and email                | store details of people I meet                                               |
-| `* * *`  | user                           | delete a contact                                                      | remove obsolete or incorrectly entered entries                               |
-| `* * *`  | user                           | edit a contact's details                                              | keep information up to date when it changes                                  |
-| `* * *`  | user                           | list all my contacts                                                  | see everyone I have stored at a glance                                       |
-| `* * *`  | user                           | search for a contact by name                                          | retrieve someone's details quickly without scrolling through the entire list |
-| `* * *`  | user                           | receive validation feedback for an invalid email format               | ensure my data is accurate and consistent                                    |
-| `* * *`  | user                           | receive validation feedback for an invalid phone number               | ensure my data is accurate and consistent                                    |
-| `* * *`  | user                           | be asked to confirm before a contact is deleted                       | avoid accidentally losing important contact information                      |
-| `* *`    | user with a large contact list | filter contacts by tag                                                | quickly find people associated with a particular group or project            |
-| `* *`    | user                           | have my contacts sorted alphabetically by default                     | browse the list in a predictable, organised order                            |
-| `* *`    | user                           | be warned when I try to add a duplicate contact                       | avoid cluttering my list with repeated entries                               |
-| `* *`    | user                           | search contacts across all fields (name, phone, email, address, tags) | find someone even if I only remember a partial detail                        |
-| `*`      | user                           | undo a delete action                                                  | recover from accidental deletions                                            |
-| `*`      | user                           | archive contacts I no longer actively use                             | keep the main list clean without permanently losing information              |
-| `*`      | user                           | export my contact list                                                | back up my data or share it with others                                      |
-| `*`      | user                           | store multiple phone numbers or emails for one contact                | accommodate contacts who have more than one reachable number or address      |
-| `*`      | power user                     | use keyboard shortcuts for common actions                             | work even faster without breaking my typing rhythm                           |
+| Priority | As a …​                        | I want to …​                                                         | So that I can…​                                                              |
+| -------- | ------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `* * *`  | new user                       | see usage instructions                                               | refer to the correct command syntax when I forget how to use the app         |
+| `* * *`  | user                           | add a contact with a name, phone number, and email                   | store details of people I meet                                               |
+| `* * *`  | user                           | edit a contact's details                                             | keep information up to date when it changes                                  |
+| `* * *`  | user                           | delete a contact                                                     | remove obsolete or incorrectly entered entries                               |
+| `* * *`  | user                           | list active contacts                                                 | focus on the people I am currently dealing with                              |
+| `* * *`  | user                           | find contacts by name keyword                                        | retrieve someone's details quickly without scanning the full list            |
+| `* * *`  | user                           | receive clear validation feedback for invalid contact details         | correct mistakes without corrupting stored data                              |
+| `* *`    | user with many inactive contacts | archive contacts I no longer actively use                          | keep the main list uncluttered without losing old data                       |
+| `* *`    | user with archived contacts    | review archived contacts separately                                  | revisit inactive contacts only when needed                                   |
+| `* *`    | user with a large contact list | filter contacts by tag                                               | quickly find people associated with a particular group or project            |
+| `* *`    | user                           | star important contacts                                              | keep my most-used contacts near the top of the list                          |
+| `* *`    | user                           | add or clear a remark on a contact                                   | store additional context about a person alongside their contact details      |
+| `* *`    | user                           | sort contacts on demand                                              | see the list in a predictable order when I need to review it                 |
+| `* *`    | user                           | be warned when I try to add a duplicate contact                      | avoid cluttering my list with repeated entries                               |
+| `*`      | user                           | export my contact list                                               | back up my data or share it with others                                      |
+| `*`      | user                           | search contacts using fields other than name                         | find someone even if I remember only a phone number, email, or tag           |
+| `*`      | user                           | store multiple phone numbers or emails for one contact               | accommodate contacts who have more than one reachable number or address      |
+| `*`      | power user                     | use keyboard shortcuts for common actions                            | work even faster without breaking my typing rhythm                           |
 
 ### Use cases
 
@@ -378,7 +359,7 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 
 1. User enters the `add` command with the required fields (name, phone, email) and any optional fields (address, tags).
 2. PingBook validates all provided fields.
-3. PingBook checks that no duplicate contact (same name and phone) exists.
+3. PingBook checks that no duplicate contact (same name, case-insensitive) exists.
 4. PingBook adds the contact and displays a success message with the new contact's details.
 
     Use case ends.
@@ -402,7 +383,7 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 **MSS**
 
 1. User enters the `find` command with a keyword.
-2. PingBook displays all contacts whose name (or other fields) match the keyword.
+2. PingBook displays all contacts whose name matches the keyword.
 3. User identifies the index of the contact to edit from the filtered list.
 4. User enters the `edit` command with the contact's index and the fields to update.
 5. PingBook validates the new field values.
@@ -447,9 +428,7 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 2. PingBook displays all contacts matching the keyword.
 3. User identifies the index of the contact to delete from the filtered list.
 4. User enters the `delete` command with the contact's index.
-5. PingBook prompts the user to confirm the deletion.
-6. User confirms.
-7. PingBook removes the contact and displays a success message.
+5. PingBook removes the contact and displays a success message.
 
     Use case ends.
 
@@ -460,15 +439,10 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 
         Use case ends.
 
-- 3a. The provided index is out of range.
-    - 3a1. PingBook shows an invalid index error message.
+- 4a. The provided index is out of range.
+    - 4a1. PingBook shows an invalid index error message.
 
         Use case resumes at step 3.
-
-- 6a. User cancels the confirmation.
-    - 6a1. PingBook cancels the deletion and shows a cancellation message.
-
-        Use case ends.
 
 ---
 
@@ -477,7 +451,7 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 **MSS**
 
 1. User enters the `list` command.
-2. PingBook displays only active (non-archived) contacts and a count of the total number shown.
+2. PingBook displays only active (non-archived) contacts.
 
     Use case ends.
 
@@ -490,66 +464,148 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 
 ---
 
-**Use case: UC05 — Archive and unarchive contacts**
+**Use case: UC05 — Archive and restore a contact**
 
 **MSS**
 
-1. User enters the `list` command.
-2. PingBook displays active contacts.
-3. User enters `archive INDEX` for a contact in the list.
-4. PingBook marks the contact as archived and removes it from active views.
-5. User enters the `listarchived` command.
-6. PingBook displays archived contacts.
-7. User enters `unarchive INDEX` for a contact in the archived list.
-8. PingBook marks the contact as active again.
-9. User enters `list` and sees the contact in active contacts.
+1. User enters `archive INDEX` for a contact in the active list.
+2. PingBook marks the contact as archived.
+3. PingBook removes the contact from active-contact views.
+4. User enters the `listarchived` command.
+5. PingBook displays archived contacts.
+6. User enters `unarchive INDEX` for a contact in the archived list.
+7. PingBook marks the contact as active again.
 
     Use case ends.
 
 **Extensions**
 
-- 3a. `INDEX` is invalid.
-    - 3a1. PingBook shows an invalid index error.
+- 1a. `INDEX` is invalid.
+    - 1a1. PingBook shows an invalid index error.
 
-        Use case resumes at step 2.
+        Use case resumes at step 1.
 
-- 3b. Contact is already archived.
-    - 3b1. PingBook shows an already archived error.
-
-        Use case resumes at step 2.
-
-- 7a. `INDEX` is invalid.
-    - 7a1. PingBook shows an invalid index error.
-
-        Use case resumes at step 6.
-
-- 7b. Contact is already active.
-    - 7b1. PingBook shows an already active error.
+- 1b. Contact is already archived.
+    - 1b1. PingBook shows an already archived error.
 
         Use case ends.
 
+- 6a. `INDEX` is invalid.
+    - 6a1. PingBook shows an invalid index error.
+
+        Use case resumes at step 5.
+
+- 6b. Contact is already active.
+    - 6b1. PingBook shows an already active error.
+
+        Use case ends.
+
+---
+
+**Use case: UC06 — Filter contacts by tag**
+
+**MSS**
+
+1. User enters the `filter` command with one or more tags.
+2. PingBook displays all active contacts that carry any of the specified tags.
+
+    Use case ends.
+
+**Extensions**
+
+- 1a. No tag prefix is provided.
+    - 1a1. PingBook shows an error asking the user to provide at least one tag.
+
+        Use case resumes at step 1.
+
+- 2a. No contacts match any of the specified tags.
+    - 2a1. PingBook shows an empty list.
+
+        Use case ends.
+
+---
+
+**Use case: UC07 — Change a contact's starred status**
+
+**MSS**
+
+1. User enters `star INDEX` or `unstar INDEX`.
+2. PingBook updates the starred status of the contact at the given index.
+3. PingBook refreshes the list so that starred contacts appear before unstarred contacts.
+
+    Use case ends.
+
+**Extensions**
+
+- 1a. The provided index is out of range.
+    - 1a1. PingBook shows an invalid index error message.
+
+        Use case resumes at step 1.
+
+- 1b. The contact already has the requested starred status.
+    - 1b1. PingBook shows an informational message and leaves the data unchanged.
+
+        Use case ends.
+
+---
+
+**Use case: UC08 — Add or clear a remark on a contact**
+
+**MSS**
+
+1. User enters the `remark INDEX r/REMARK_TEXT` command.
+2. PingBook updates the contact at the given index with the provided remark text.
+3. PingBook displays a success message showing the updated contact.
+
+    Use case ends.
+
+**Extensions**
+
+- 1a. The provided index is out of range.
+    - 1a1. PingBook shows an invalid index error message.
+
+        Use case resumes at step 1.
+
+- 1b. User provides an empty remark (`r/`).
+    - 1b1. PingBook clears the existing remark on the contact.
+
+        Use case ends.
+
+---
+
+**Use case: UC09 — Sort contacts**
+
+**MSS**
+
+1. User enters the `sort` command.
+2. PingBook reorders stored contacts so that starred contacts come first and, within each group, contacts are ordered alphabetically by name.
+3. PingBook displays the sorted list.
+
+    Use case ends.
+
 ### Non-Functional Requirements
 
-1. **Portability**: Should work on any _mainstream OS_ (Windows, Linux, macOS) with Java `17` or above installed, without requiring any additional installation steps beyond downloading the JAR file.
-2. **Performance**: Should be able to hold up to 1000 contacts without noticeable sluggishness for typical usage. All commands should produce a response within 2 seconds on a modern consumer laptop.
-3. **Usability**: A user with above-average typing speed for regular English text should be able to accomplish most tasks faster using CLI commands than using a mouse-driven GUI.
-4. **Reliability**: Contact data should be persisted to disk automatically after every command so that no data is lost upon a normal application exit.
-5. **Data integrity**: The application should reject all invalid or malformed inputs (e.g., incorrectly formatted phone numbers or emails) and display a clear, specific error message without modifying any stored data.
-6. **Learnability**: A new user who has basic familiarity with CLI tools should be able to complete core tasks (add, find, edit, delete) within 10 minutes of first launch, using only the built-in help command.
-7. **Scalability**: The contact storage format should remain backwards-compatible across minor version updates so that users do not lose data when upgrading the app.
-8. **Single-user**: The product is designed for use by a single user on one machine and does not need to support concurrent access or multi-user synchronisation.
+1. **Portability**: PingBook should run on current versions of Windows, macOS, and mainstream Linux distributions, provided Java `17` is installed.
+2. **Performance**: On a typical student laptop, the commands `add`, `edit`, `delete`, `find`, `filter`, `list`, and `sort` should each complete within 2 seconds with a contact list of up to 1000 entries.
+3. **Reliability**: After every successful command that changes data, PingBook should persist the updated state to disk automatically so that a normal application exit does not lose the latest changes.
+4. **Robustness**: Invalid input should not modify stored data, and the system should return an error message that clearly identifies the problem.
+5. **Learnability**: A new user with basic CLI familiarity should be able to complete the core tasks `add`, `find`, `edit`, and `delete` within 10 minutes of first launch using the built-in help and user guide.
+6. **Backward compatibility**: Save files produced by earlier minor versions should continue to load without requiring manual migration by the user.
+7. **Privacy**: PingBook should store contact data locally and should not transmit contact information over a network during normal use.
 
 ### Glossary
 
 - **CLI (Command-Line Interface)**: A text-based interface where the user types commands to interact with the application, as opposed to using a mouse and graphical elements.
-- **Contact**: A person whose details (e.g., name, phone number, email address) are stored in PingBook.
-- **Duplicate contact**: Two contacts that share the same name (case-insensitive) and phone number, considered to represent the same person.
+- **Active contact**: A contact that is not archived and appears in the default `list` view.
+- **Archived contact**: A contact that has been moved out of the active list using the `archive` command. Archived contacts are hidden from the default view but can be retrieved with `listarchived`.
+- **Command word**: The leading word in a CLI command that identifies the operation to run, such as `add`, `delete`, or `sort`.
+- **Duplicate contact**: Two contacts that share the same name (case-insensitive), considered to represent the same person.
 - **Index**: The position number displayed next to a contact in the currently visible list. Used to identify which contact a command should act on.
-- **Mainstream OS**: Windows, Linux, Unix, macOS.
+- **Mainstream OS**: A widely used operating system supported by PingBook, specifically Windows, macOS, or a mainstream Linux distribution.
 - **MSS (Main Success Scenario)**: The sequence of steps in a use case that describes the most straightforward path to a successful outcome.
-- **MVP (Minimum Viable Product)**: The smallest set of features required to deliver core value to users. For PingBook, this includes adding, deleting, editing, listing, and searching contacts with basic validation.
+- **Remark**: A free-text note that can be attached to a contact using the `remark` command to record additional information.
+- **Starred contact**: A contact that has been marked as important using the `star` command. Starred contacts are displayed before unstarred contacts in all list views.
 - **Tag**: A short alphanumeric label that can be attached to a contact to group or categorise them (e.g., `friend`, `work`, `project-alpha`).
-- **PingBook**: The name of this contact management application, built for tech-savvy students who manage many contacts across multiple commitments.
 
 ---
 

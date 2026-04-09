@@ -13,10 +13,7 @@ Class ModelManager
 Class UserPrefs
 
 Class UniquePersonList
-Class Person {
-    isArchived : boolean
-    isStarred : boolean
-}
+Class Person
 Class Address
 Class Email
 Class Name
@@ -40,7 +37,7 @@ ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
 AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
+UniquePersonList --> "*" Person
 Person *--> Name
 Person *--> Phone
 Person *--> Email
@@ -56,5 +53,5 @@ Phone -[hidden]right-> Address
 Address -[hidden]right-> Email
 Email -[hidden]right-> Remark
 
-ModelManager --> "~* filtered" Person
+ModelManager --> "*" Person
 @enduml
