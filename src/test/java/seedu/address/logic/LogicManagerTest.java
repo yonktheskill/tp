@@ -92,7 +92,7 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_addWhileViewingArchived_preservesArchivedView() throws Exception {
+    public void execute_addWhileViewingArchived_switchesToActiveView() throws Exception {
         AddressBookBuilder addressBookBuilder = new AddressBookBuilder().withPerson(ALICE.withArchived(true));
         model = new ModelManager(addressBookBuilder.build(), new UserPrefs());
 
@@ -112,8 +112,9 @@ public class LogicManagerTest {
 
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(expectedAddedPerson), 2),
                 result.getFeedbackToUser());
+        // After adding, view should switch to active contacts so the new contact is visible
         assertEquals(1, logic.getFilteredPersonList().size());
-        assertEquals(ALICE.withArchived(true), logic.getFilteredPersonList().get(0));
+        assertEquals(expectedAddedPerson, logic.getFilteredPersonList().get(0));
     }
 
     @Test

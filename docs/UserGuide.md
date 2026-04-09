@@ -569,7 +569,7 @@ Shows all your active (non-archived) contacts.
 <span class="example-label">📌 <strong>Example: list all active contacts</strong></span>
 <pre class="example-command">list</pre>
 <span class="example-result-label">✅ <strong>Expected result:</strong></span>
-<pre class="example-result">Listed all active contacts.</pre>
+<pre class="example-result">Listed active contacts</pre>
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -583,7 +583,7 @@ Shows only the contacts that match any of the keywords you search for.
 - The search is **case-insensitive**, meaning it does not matter whether you use uppercase or lowercase letters. `alex` matches `Alex`.
 - **Partial matching** is supported. Searching `Al` will find `Alex`, `Alice`, etc.
 - If you type multiple keywords, contacts matching **any one** of them are shown. For example, `find wei priya` shows everyone named Wei and everyone named Priya.
-- The search looks across **all fields**: name, phone number, email, address, and tags. For example, `find 9123` finds contacts whose phone number contains `9123`, and `find ta` finds contacts tagged `ta`.
+- The search looks across **all fields**: name, phone number, email, address, remark, and tags. For example, `find 9123` finds contacts whose phone number contains `9123`, and `find ta` finds contacts tagged `ta`.
 - The search respects your current view. If you are viewing archived contacts (via `listarchived`), `find` searches only within archived contacts. If you are in the active view (via `list`), it searches only active contacts.
 
 ##### Steps
@@ -649,7 +649,8 @@ Reorders your contact list so that starred contacts appear first, and all remain
 <span class="example-label">📌 <strong>Example: sort the contact list</strong></span>
 <pre class="example-command">sort</pre>
 <span class="example-result-label">✅ <strong>Expected result:</strong></span>
-<pre class="example-result">Sorted all persons (starred first, then by name) and the contact list reorders accordingly.</pre>
+<pre class="example-result">Sorted all persons (starred first, then by name)</pre>
+The contact list reorders accordingly.
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -732,7 +733,8 @@ Hides a contact from the main list without deleting them. Useful for people you 
 <span class="example-label">📌 <strong>Example: archive contact number 5</strong></span>
 <pre class="example-command">archive 5</pre>
 <span class="example-result-label">✅ <strong>Expected result:</strong></span>
-<pre class="example-result">Archived Person: ... and the contact no longer appears in the active list.</pre>
+<pre class="example-result">Archived Person: ...</pre>
+The contact no longer appears in the active list.
 </div>
 
 <div markdown="block" class="alert alert-info">
@@ -757,7 +759,8 @@ Moves an archived contact back to your active list.
 <span class="example-label">📌 <strong>Example: restore the first archived contact</strong></span>
 <pre class="example-command">unarchive 1</pre>
 <span class="example-result-label">✅ <strong>Expected result:</strong></span>
-<pre class="example-result">The contact disappears from the archived list and reappears when you run list.</pre>
+<pre class="example-result">Unarchived Person: ...</pre>
+The contact disappears from the archived list and reappears when you run <code>list</code>.
 </div>
 
 <div markdown="block" class="alert alert-info">
@@ -781,7 +784,8 @@ Shows all contacts that have been archived.
 <span class="example-label">📌 <strong>Example: view all archived contacts</strong></span>
 <pre class="example-command">listarchived</pre>
 <span class="example-result-label">✅ <strong>Expected result:</strong></span>
-<pre class="example-result">Listed archived contacts and all archived contacts appear in the list.</pre>
+<pre class="example-result">Listed archived contacts</pre>
+All archived contacts appear in the list.
 </div>
 
 ![The archived contacts list view](images/ListArchived.png)

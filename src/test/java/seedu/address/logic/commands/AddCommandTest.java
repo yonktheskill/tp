@@ -216,6 +216,16 @@ public class AddCommandTest {
             personsAdded.forEach(ab::addPerson);
             return ab;
         }
+
+        @Override
+        public void setViewPredicate(Predicate<Person> predicate) {
+            // no-op for stub
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            // no-op for stub
+        }
     }
 
 }

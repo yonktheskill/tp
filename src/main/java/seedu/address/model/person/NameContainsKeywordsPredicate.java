@@ -7,7 +7,7 @@ import seedu.address.commons.util.ToStringBuilder;
 
 /**
  * Tests that a {@code Person}'s fields contain any of the keywords given.
- * Uses case-insensitive substring matching across name, phone, email, address, and tags.
+ * Uses case-insensitive substring matching across name, phone, email, address, remark, and tags.
  */
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
@@ -39,6 +39,10 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
         }
         if (person.getTags().stream()
                 .anyMatch(tag -> tag.tagName.toLowerCase().contains(lowerKeyword))) {
+            return true;
+        }
+        if (!person.getRemark().value.isEmpty()
+                && person.getRemark().value.toLowerCase().contains(lowerKeyword)) {
             return true;
         }
         return false;
