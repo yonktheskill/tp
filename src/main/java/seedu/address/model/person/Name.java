@@ -12,7 +12,7 @@ public class Name {
     public static final String MESSAGE_CONSTRAINTS =
             "Names should only contain letters, digits, spaces, hyphens, apostrophes, and periods,"
                     + " must start with a letter or digit, and punctuation cannot appear consecutively or at the"
-                    + " end of the name";
+                + " end of the name. Multiple spaces are not allowed";
 
     /*
      * Names must start with a letter or digit (\p{L} or \p{N}).

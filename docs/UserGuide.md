@@ -427,7 +427,7 @@ Each prefix (`n/`, `p/`, `e/`, etc.) tells PingBook what type of information fol
 
 | Field | Required? | Rules |
 |---|---|---|
-| `n/NAME` | Yes | Letters (including accented characters), digits, spaces, hyphens, apostrophes, and periods allowed (e.g. `Anne-Marie`, `O'Brien`, `Dr. Lee`). Must start with a letter or digit, and punctuation cannot appear consecutively or at the end of the name. |
+| `n/NAME` | Yes | Letters (including accented characters), digits, spaces, hyphens, apostrophes, and periods allowed (e.g. `Anne-Marie`, `O'Brien`, `Dr. Lee`). Must start with a letter or digit; punctuation cannot appear consecutively or at the end of the name; and multiple spaces are not allowed. |
 | `p/PHONE` | Yes | Digits only, 3 to 15 digits long. |
 | `e/EMAIL` | Yes | Must follow `localpart@domain` (e.g. `alex@email.com`). The domain must contain period-separated labels (at least one `.`), each label may contain letters/digits and internal hyphens only, and the final label must be at least 2 characters (so `a@localhost` and `doc@doc` are invalid). |
 | `a/ADDRESS` | No | Any text. Can be added later using `edit`. |

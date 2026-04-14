@@ -31,6 +31,7 @@ public class NameTest {
         assertFalse(Name.isValidName("peter*")); // contains non-alphanumeric characters
         assertFalse(Name.isValidName("John.")); // trailing period not allowed
         assertFalse(Name.isValidName("Smith-")); // trailing hyphen not allowed
+        assertFalse(Name.isValidName("John  Smith")); // multiple spaces not allowed
         assertFalse(Name.isValidName("O''Brien")); // consecutive punctuation not allowed
         assertFalse(Name.isValidName("John.-.Smith")); // mixed consecutive punctuation not allowed
 
